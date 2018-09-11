@@ -28,40 +28,55 @@ mongoose.connect("mongodb://localhost/news-scraper");
 
 // Routes
 app.get("/scrape",function(req,res) {
+
     // First, we grab the body of the html with request
-    axios.get("https://www.nytimes.com/").then(function(response) {
+    axios.get("https://careers-mortenson.icims.com/jobs/search?ss=1").then(function(response) {
         // Then, we load that into cheerio and save it to $ for a shorthand selector
         var $ = cheerio.load(response.data);
 
-        // Now, we grab every h2 within an article tag, and do the following:
-        $("article h2").each(function(i, element) {
+        // Now, we grab every div within an article tag, and do the following:
+        $("ul.container-fluid.iCIMS_JobsTable").each(function(i, element) {
+
             // Save an empty result object
             var result = {};
-            // Add the text and href of every link, and save them as properties of the result object
-            result.title = $(this)
-                .children("a")
-                .text();
-            result.link = $(this)
-                .children("a")
-                .attr("href");
 
+              // Add the text and href of every link, and save them as properties of the result object
+              result.title = $(this)
+                .children("li.row")
+                .children("div.col-xs-12.title")
+                .children("a")
+                .children("span")
+                .text();
+  
+              result.location = $(this)
+                  .children("li.row")
+                  .children("div.col-xs-6.header.left")
+                  .text();
+  
+              result.link = $(this)
+                  .children("li.row")
+                  .children("div.col-xs-12.title")
+                  .children("a.iCIMS_Anchor")
+                  .attr("href");
+    
+            console.log(result);
+                
         // Create a new Article using the `result` object built from scraping
         db.Article.create(result)
             .then(function(dbArticle) {
             // View the added result in the console
-            console.log(dbArticle);
+                console.log(dbArticle);
             })
             .catch(function(err) {
-            // If an error occurred, send it to the client
-            return res.json(err);
-            }); 
-
-            // If we were able to successfully scrape and save an Article, send a message to the client
-            res.send("Scrape Complete");
-
-        })
-    })
-})
+                // If an error occurred, send it to the client
+                return res.json(err);
+            });
+            
+        });
+        // If we were able to successfully scrape and save an Article, send a message to the client
+        res.send("Scrape Complete");
+    });
+});
 
 // Route for getting all Articles from the db
 app.get("/articles", function(req, res) {

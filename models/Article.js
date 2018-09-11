@@ -12,7 +12,7 @@ var ArticleSchema = new Schema({
     required: true
   },
   // `text` is required and of type String
-  summary: {
+  location: {
     type: String,
     required: true
   },

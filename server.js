@@ -29,37 +29,39 @@ mongoose.connect("mongodb://localhost/news-scraper");
 // Routes
 app.get("/scrape",function(req,res) {
 
+    //for (i = 1,)
+
     // First, we grab the body of the html with request
     axios.get("https://careers-mortenson.icims.com/jobs/search?ss=1").then(function(response) {
         // Then, we load that into cheerio and save it to $ for a shorthand selector
         var $ = cheerio.load(response.data);
 
         // Now, we grab every div within an article tag, and do the following:
-        $("ul.container-fluid.iCIMS_JobsTable").each(function(i, element) {
+        $("li.row").each(function(i, element) {
 
             // Save an empty result object
             var result = {};
 
               // Add the text and href of every link, and save them as properties of the result object
               result.title = $(this)
-                .children("li.row")
                 .children("div.col-xs-12.title")
                 .children("a")
                 .children("span")
-                .text();
+                .last()
+                .text()
+                .trim();
   
               result.location = $(this)
-                  .children("li.row")
                   .children("div.col-xs-6.header.left")
-                  .text();
+                  .children("span")
+                  .last()
+                  .text()
+                  .trim();
   
               result.link = $(this)
-                  .children("li.row")
                   .children("div.col-xs-12.title")
                   .children("a.iCIMS_Anchor")
                   .attr("href");
-    
-            console.log(result);
                 
         // Create a new Article using the `result` object built from scraping
         db.Article.create(result)

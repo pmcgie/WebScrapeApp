@@ -29,10 +29,11 @@ mongoose.connect("mongodb://localhost/news-scraper");
 // Routes
 app.get("/scrape",function(req,res) {
 
-    //for (i = 1,)
+  // Grab for multiple pages
+  for (i = 0; i < 50; i++) {
 
-    // First, we grab the body of the html with request
-    axios.get("https://careers-mortenson.icims.com/jobs/search?ss=1").then(function(response) {
+    // First, we grab the body of the html with   request
+    axios.get("https://careers-mortenson.icims.com/jobs/search?pr="+i+"&schemaId=&o=").then(function(response) {
         // Then, we load that into cheerio and save it to $ for a shorthand selector
         var $ = cheerio.load(response.data);
 
@@ -62,23 +63,37 @@ app.get("/scrape",function(req,res) {
                   .children("div.col-xs-12.title")
                   .children("a.iCIMS_Anchor")
                   .attr("href");
-                
-        // Create a new Article using the `result` object built from scraping
-        db.Article.create(result)
-            .then(function(dbArticle) {
-            // View the added result in the console
-                console.log(dbArticle);
-            })
-            .catch(function(err) {
-                // If an error occurred, send it to the client
-                return res.json(err);
-            });
-            
+
+                  // Check to see if unique id exists
+                  let object_in_db = db.Article.aggregate(
+                    {
+                      count: "link",
+                      query: {link: {$eq:result.link}},
+                    }
+                  )
+
+            // Conditional statement to add or not add
+            console.log(object_in_db)
+
+          if (object_in_db > 0) {
+                    
+            // Create a new Article using the `result` object built from scraping
+            db.Article.create(result)
+                .then(function(dbArticle) {
+                // View the added result in the console
+                    console.log(dbArticle);
+                })
+                .catch(function(err) {
+                    // If an error occurred, send it to the client
+                    return res.json(err);
+              });
+          } else console.log("not added")
+          });
         });
-        // If we were able to successfully scrape and save an Article, send a message to the client
-        res.send("Scrape Complete");
-    });
+  };
+  res.send("Scrape Complete");
 });
+
 
 // Route for getting all Articles from the db
 app.get("/articles", function(req, res) {

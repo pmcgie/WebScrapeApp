@@ -64,18 +64,8 @@ app.get("/scrape",function(req,res) {
                   .children("a.iCIMS_Anchor")
                   .attr("href");
 
-                  // Check to see if unique id exists
-                  let object_in_db = db.Article.aggregate(
-                    {
-                      count: "link",
-                      query: {link: {$eq:result.link}},
-                    }
-                  )
-
-            // Conditional statement to add or not add
-            console.log(object_in_db)
-
-          if (object_in_db > 0) {
+                  db.Article.count({ link: result.link}, function (err,dupeCheck){
+                    if (dupeCheck === 0) {
                     
             // Create a new Article using the `result` object built from scraping
             db.Article.create(result)
@@ -90,7 +80,8 @@ app.get("/scrape",function(req,res) {
           } else console.log("not added")
           });
         });
-  };
+  });
+  }
   res.send("Scrape Complete");
 });
 
@@ -107,7 +98,7 @@ app.get("/articles", function(req, res) {
         // If an error occurred, send it to the client
         res.json(err);
       });
-  });
+});
   
   // Route for grabbing a specific Article by id, populate it with it's note
   app.get("/articles/:id", function(req, res) {
@@ -123,7 +114,7 @@ app.get("/articles", function(req, res) {
         // If an error occurred, send it to the client
         res.json(err);
       });
-  });
+});
   
   // Route for saving/updating an Article's associated Note
   app.post("/articles/:id", function(req, res) {
@@ -143,7 +134,7 @@ app.get("/articles", function(req, res) {
         // If an error occurred, send it to the client
         res.json(err);
       });
-  });
+});
   
   // Start the server
   app.listen(PORT, function() {

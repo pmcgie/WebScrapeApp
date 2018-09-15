@@ -1,13 +1,32 @@
 // Grab the articles as a json
 $.getJSON("/articles", function(data) {
-    // For each one
-    for (var i = 0; i < data.length; i++) {
+
+  // For each one
+  for (var i = 0; i < data.length; i++) {
+
+
       // Display the apropos information on the page
-      $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
-    }
-  });
+//<br />" + data[i].location + "<br />" + data[i].link + "</p>"
+
+      $("#articles").append(
+        `<div class="container">
+          <div class="card" data-id=${data[i]._id}>
+            <div class="card-header" 
+              style ="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; 
+                        border: black 1px solid;
+                        width: 80%;
+                        margin: 10px 0px 10px 20px;
+                      ">
+              ${data[i].title}
+            </div>
+          </div>
+          </div>
+        `)
+  };
+})
   
-  
+  //TODO - NEED TO CHANGE TO MODAL UPON CLICK THAT WILL SHOW CURRENT AND NEW NOTE INPUT BOX!!!
+
   // Whenever someone clicks a p tag
   $(document).on("click", "p", function() {
     // Empty the notes from the note section
@@ -23,6 +42,7 @@ $.getJSON("/articles", function(data) {
       // With that done, add the note information to the page
       .then(function(data) {
         console.log(data);
+
         // The title of the article
         $("#notes").append("<h2>" + data.title + "</h2>");
         // An input to enter a new title

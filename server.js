@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/news-scraper");
+mongoose.connect("mongodb://localhost/mort-scraper");
 
 // Routes
 app.get("/scrape",function(req,res) {
@@ -64,7 +64,7 @@ app.get("/scrape",function(req,res) {
                   .children("a.iCIMS_Anchor")
                   .attr("href");
 
-                  db.Article.count({ link: result.link}, function (err,dupeCheck){
+        db.Article.count({ link: result.link}, function (err,dupeCheck){
                     if (dupeCheck === 0) {
                     
             // Create a new Article using the `result` object built from scraping
@@ -78,8 +78,8 @@ app.get("/scrape",function(req,res) {
                     return res.json(err);
               });
           } else console.log("not added")
-          });
         });
+      });
   });
   }
   res.send("Scrape Complete");

@@ -2,29 +2,29 @@
 <html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>Scraping With Mongoose</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        
+    <title>Mort Scrape</title>
     <style>
-      body { background-color: #F2F6D0 }
+      body { background-color:whitesmoke }
       #wrapper {
         width: 960px;
         margin-left: auto;
         margin-right: auto;
         padding-top: 5%;
       }
-      #articles {
-        display: inline-block;
-        overflow: auto;
-        width: 60%;
-        height: 700px;
-      }
-      #notes {
-        float: right;
-        width: 30%;
-      }
       textarea, input {
         display: block;
         width: 100%;
-        background-color: #FCF5C7;
+        background-color: aliceblue;
       }
       input {
         height: 36px;
@@ -34,15 +34,48 @@
         height: 200px;
         font-size: 18px;
       }
+      #MainHeader {
+        text-align: center;
+        background-color: black;
+        color: aliceblue;
+        padding: 20px 10px 10px 10px;
+      }
+      #search {
+        text-align: center;
+        background-color: white;
+      }
     </style>
   </head>
+
+  <!--TODO - NEED TO CHANGE DESIGN!!!-->
+  <!--DESIGN WILL HAVE A FEW BUTTONS TO EITHER POP UP NOTES-->
   <body>
-    <div id="wrapper">
-      <h1>Mort Job Notes Scraper</h1>
-      <h2><i>See below for list of Jobs at Mort Company.</i></h2>
-      <div id="articles"></div>
-      <div id="notes"></div>
-    </div>
+      <div class="jumbotron jumbotron-fluid" id="MainHeader">
+          <div class="container">
+            <h1 class="display-4">Mort Job Notes Scraper</h1>
+            <p class="lead">An application that scrapes jobs from a particular website.</p>
+          </div>
+      </div>
+
+      <div class="container">
+        <div class="row" style="margin:10px 0px 20px 0px;">
+          <div class="col col-lg-4">
+              <button class="btn btn-primary" style="width: 80%;" type="submit">Click Here to Scrape New Jobs</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row" style="margin:10px 0px 20px 0px;">
+          <div class="col col-lg-10">
+            <input type="text" name="search" placeholder="Search for articles" id="search">
+          </div>
+        </div>
+      </div>
+
+
+
+    <div id="articles"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="app.js"></script>
   </body>

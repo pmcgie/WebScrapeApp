@@ -24,7 +24,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/mort-scraper");
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mort-scraper"
+
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI);
 
 // Routes
 app.get("/scrape",function(req,res) {
@@ -64,7 +67,7 @@ app.get("/scrape",function(req,res) {
                   .children("a.iCIMS_Anchor")
                   .attr("href");
 
-        db.Article.count({ link: result.link}, function (err,dupeCheck){
+        db.Article.countDocuments({ link: result.link}, function (err,dupeCheck){
                     if (dupeCheck === 0) {
                     
             // Create a new Article using the `result` object built from scraping

@@ -4,26 +4,41 @@ $.getJSON("/articles", function(data) {
   // For each one
   for (var i = 0; i < data.length; i++) {
 
-
-      // Display the apropos information on the page
-//<br />" + data[i].location + "<br />" + data[i].link + "</p>"
-
       $("#articles").append(
         `<div class="container">
-          <div class="card" data-id=${data[i]._id}>
+          <div class="card" data-id=${data[i]._id}
+                      style = "border: black 1px solid;
+                      width: 80%;
+                      margin: 10px 0px 10px 20px;">
+
             <div class="card-header" 
-              style ="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; 
-                        border: black 1px solid;
-                        width: 80%;
-                        margin: 10px 0px 10px 20px;
+              style ="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
                       ">
-              ${data[i].title}
+              Job Title: ${data[i].title}
+            </div>
+            <div>
+              Job Location: ${data[i].location}
+            </div>
+            <div>
+              Job link: <a href=${data[i].link}>${data[i].link}</a>
             </div>
           </div>
           </div>
         `)
   };
 })
+
+// Grab the articles as a json
+$("#scrape").on("click", function() {
+  $.ajax({
+      method: "GET",
+      url: "/scrape",
+  }).done(function(data) {
+      console.log(data)
+      window.location = "/"
+  })
+});
+
   
   //TODO - NEED TO CHANGE TO MODAL UPON CLICK THAT WILL SHOW CURRENT AND NEW NOTE INPUT BOX!!!
 
